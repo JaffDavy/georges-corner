@@ -6,7 +6,6 @@ function Landing() {
   return (
     <div className="min-h-screen bg-black text-white flex flex-col">
 
-      {/* NAV */}
       <nav className="flex justify-between items-center px-10 py-6 border-b border-gray-800">
         <h1 className="text-xl font-bold">George’s Corner 🍷</h1>
       </nav>

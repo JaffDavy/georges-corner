@@ -8,9 +8,23 @@ import CartPage from "./pages/CartPage";
 function App() {
   const [cart, setCart] = useState([]);
 
-  const addToCart = (item) => {
-    setCart([...cart, item]);
-  };
+  const addToCart = (item, quantity) => {
+  setCart(prevCart => {
+    const existingItem = prevCart.find(i => i.id === item.id);
+
+    if (existingItem) {
+      return prevCart.map(i =>
+        i.id === item.id
+          ? { ...i, quantity: i.quantity + quantity }
+          : i
+      );
+    }
+
+    return [...prevCart, { ...item, quantity }];
+  });
+};
+
+  const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   const removeFromCart = (index) => {
     const newCart = [...cart];
@@ -20,14 +34,17 @@ function App() {
 
   return (
     <Routes>
-      <Route path="/" element={<Landing />} />
-      <Route path="/menu" element={<MenuPage addToCart={addToCart} />} />
-      <Route
-        path="/cart"
-        element={
-          <CartPage cart={cart} removeFromCart={removeFromCart} />
-        }
-      />
+    <Route path="/" element={<Landing />} />
+    <Route 
+      path="/menu" 
+      element={<MenuPage addToCart={addToCart} totalItems={totalItems} />} 
+    />
+    <Route
+      path="/cart"
+      element={
+        <CartPage cart={cart} removeFromCart={removeFromCart} />
+      }
+    />
     </Routes>
   );
 }

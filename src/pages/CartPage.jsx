@@ -1,6 +1,8 @@
 function CartPage({ cart, removeFromCart }) {
-  const total = cart.reduce((sum, item) => sum + item.price, 0);
-
+  const total = cart.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
   return (
     <div className="min-h-screen bg-black text-white p-10">
 
@@ -18,25 +20,24 @@ function CartPage({ cart, removeFromCart }) {
               >
                 <div>
                   <h3 className="font-semibold">{item.name}</h3>
-                  <p className="text-yellow-500">{item.price} XAF</p>
+                  <p className="text-yellow-500">
+                    {item.price} XAF × {item.quantity}
+                  </p>
                 </div>
 
                 <button
                   onClick={() => removeFromCart(index)}
                   className="bg-red-500 px-3 py-1 rounded"
-                >
+                 >
                   Remove
                 </button>
               </div>
-            ))}
+           ))}
           </div>
 
-          {/* TOTAL */}
           <div className="mt-8 text-xl font-bold">
             Total: <span className="text-yellow-500">{total} XAF</span>
           </div>
-
-          {/* ORDER BUTTON */}
           <button className="mt-6 bg-yellow-500 text-black px-6 py-3 rounded-full font-semibold hover:bg-yellow-400">
             Place Order
           </button>
