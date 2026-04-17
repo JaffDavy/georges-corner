@@ -1,8 +1,39 @@
+import { useState } from "react"
+
 function CartPage({ cart, removeFromCart }) {
+  const [name, setName] = useState("")
+  const [table, setTable] = useState("")
+  const [message, setMessage] = useState("")
+
   const total = cart.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0
   );
+
+  const handleOrder = async () => {
+    const order = {
+      customerName: name,
+      tableNumber: table,
+      items: cart,
+      total
+    }
+
+    try {
+      const res = await fetch("http://localhost:5000/order", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(order)
+      })
+
+      const data = await res.json()
+      setMessage(data.message || "Order placed successfully!")
+    } catch (error) {
+      console.error("Error placing order:", error)
+      setMessage("Failed to place order.")
+    }
+  }
   return (
     <div className="min-h-screen bg-black text-white p-10">
 
@@ -38,9 +69,34 @@ function CartPage({ cart, removeFromCart }) {
           <div className="mt-8 text-xl font-bold">
             Total: <span className="text-yellow-500">{total} XAF</span>
           </div>
-          <button className="mt-6 bg-yellow-500 text-black px-6 py-3 rounded-full font-semibold hover:bg-yellow-400">
-            Place Order
-          </button>
+          <div className="mt-10 space-y-4">
+            <input
+              type="text"
+              placeholder="Your Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="w-full p-3 rounded bg-gray-800"
+            />
+
+            <input
+              type="text"
+              placeholder="Table Number"
+              value={table}
+              onChange={(e) => setTable(e.target.value)}
+              className="w-full p-3 rounded bg-gray-800"
+            />
+
+            <button
+              onClick={handleOrder}
+              className="cursor-pointer w-full bg-yellow-500 text-black py-3 rounded font-bold"
+            >
+             Place Order
+            </button>
+
+            {message && (
+              <p className="text-green-400 mt-2">{message}</p>
+            )}
+          </div>
         </>
       )}
     </div>
