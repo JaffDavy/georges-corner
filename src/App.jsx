@@ -27,10 +27,20 @@ function App() {
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   const removeFromCart = (index) => {
-    const newCart = [...cart];
-    newCart.splice(index, 1);
-    setCart(newCart);
-  };
+  setCart(prevCart => {
+    const item = prevCart[index];
+
+    if (item.quantity > 1) {
+      return prevCart.map((i, idx) =>
+        idx === index
+          ? { ...i, quantity: i.quantity - 1 }
+          : i
+      );
+    }
+
+    return prevCart.filter((_, idx) => idx !== index);
+  });
+};
 
   return (
     <Routes>

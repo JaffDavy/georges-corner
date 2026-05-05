@@ -17,7 +17,6 @@ function FoodCard({ item, addToCart }) {
           {item.price} XAF
         </p>
 
-        {/* QUANTITY */}
         <div className="flex items-center gap-3 mt-3">
           <button
             onClick={() => setQuantity(q => Math.max(1, q - 1))}
@@ -36,7 +35,6 @@ function FoodCard({ item, addToCart }) {
           </button>
         </div>
 
-        {/* ADD BUTTON */}
         <button
           onClick={() => addToCart(item, quantity)}
           className="mt-4 w-full bg-yellow-500 text-black py-2 rounded-lg font-semibold hover:bg-yellow-400"
